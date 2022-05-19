@@ -22,10 +22,22 @@ import pyautogui
 import os
 import winsound
 import threading
+import pyttsx3
 
 r = sr.Recognizer()
 
-winsound.Beep(500,1000) # if you dont like how lowed it is change you system sound level
+print("Enable MicMuter (usfull becuase it will stop it from picking up more noise)")
+A = input("[y/n]?")
+
+if A == "y":
+    os.system('start micmute/mic_mute.exe')
+    print('press F8 for to mute mic')
+
+engine = pyttsx3.init()
+engine.say('Starting virtual assistant')
+engine.runAndWait()
+
+#winsound.Beep(500,1000) # if you dont like how lowed it is change you system sound level
 
 webbrowser.register('chrome',
 	None,
@@ -48,63 +60,75 @@ def mic_detect():
             try:
                 text = r.recognize_google(audio)
                 text = text.lower()
+                print(text)
                 if keyWord.lower() in text.lower():
-                    winsound.Beep(1000,100)
                     print('Keyword detected in the speech.')
-                    if google_var1 in text.lower():
-                        print(text)
-                        res = text.partition(google_split)[2]
-                        for j in search(res, tld="co.in", num=1, stop=1, pause=2):
-                            if google_var2 in text:
-                                print("var2 active")
-                                res = text.partition(google_var2)[2]
-                                for j in search(res, tld="co.in", num=1, stop=1, pause=2):
-                                    print(j)
-                                    webbrowser.get('chrome').open(j)
-                                    time.sleep(2)
-                                    print(width2, width_tab, height)
-                                    hwnd = win32gui.GetForegroundWindow()#          xpos ypos width hight importance
-                                    win32gui.SetWindowPos(hwnd,win32con.HWND_TOPMOST,width2,0,width_tab,height,0)
-                                    print("done")
-                                    os.system('python main.py')
-                            else:
-                                print("opening ", j)
-                                webbrowser.get('chrome').open(j)
-                                os.system('python main.py')
-
-                
+                    if google_var1 in text.lower(): #if google in request
+                        if google_var2 in text.lower(): #if pin in google request
+                            engine.say('opening and pinning tab')
+                            engine.runAndWait()
+                            res = text.partition(google_var2)[2] #formatting text
+                            for j in search(res, tld="co.in", num=1, stop=1, pause=2): #get website
+                                print(j)
+                                webbrowser.get('chrome').open(j) #open website
+                                time.sleep(1)
+                                #pin the page
+                                hwnd = win32gui.GetForegroundWindow()#          xpos ypos width hight importance
+                                win32gui.SetWindowPos(hwnd,win32con.HWND_TOPMOST,width2,0,width_tab,height,0)
+                        else:
+                            engine.say('opening tab')
+                            engine.runAndWait()
+                            res = text.partition(google_var1)[2] #formating text
+                            for j in search(res, tld="co.in", num=1, stop=1, pause=2): #getting website
+                                webbrowser.get('chrome').open(j) #opening website
+                        
                     if "bon qui qui close tab" in text:
-                        print("closeing")
                         os.system('TASKKILL /IM chrome.exe /F')
+                        engine.say('closing tab')
+                        engine.runAndWait()
+                        continue
                 
                     if "bon qui qui type" in text:
-                        print("typing")
+                        engine.say('typing')
+                        engine.runAndWait()
                         typed = text.partition("type ")[2]
                         pyautogui.write(typed)
                         continue
 
                     if text == "bon qui qui open spotify":
+                        engine.say('opening spotify')
+                        engine.runAndWait()
                         os.system(r"start shortcuts\short_spotify.lnk")
                         continue
 
                     if text == "bon qui qui open discord":
                         os.system(r"start shortcuts\short_discord.lnk")
+                        engine.say('opening discord')
+                        engine.runAndWait()
                         continue
     
                     if text == "bon qui qui open steam":
                         os.system(r"start shortcuts\short_steam.lnk")
+                        engine.say('opening steam')
+                        engine.runAndWait()
                         continue
 
                     if text == "bon qui qui open csgo":
                         os.system(r"start shortcuts\short_csgo.url")
+                        engine.say('opening C S GO')
+                        engine.runAndWait()
                         continue
                 
                     if text == "bon qui qui open deep rock galactic":
                         os.system(r"start shortcuts\short_drg.url")
+                        engine.say('opening D R G')
+                        engine.runAndWait()
                         continue
 
                     if text == "bon qui qui open minecraft":
                         os.system(r"start shortcuts\short_minecraft.lnk")
+                        engine.say('opening Minecraft')
+                        engine.runAndWait()
                         continue
         
             except Exception as e:
