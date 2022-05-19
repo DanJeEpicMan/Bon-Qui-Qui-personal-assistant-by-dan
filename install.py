@@ -1,0 +1,16 @@
+import os
+import time
+print("installing... (this will take around 3 min)")
+time.sleep(1.5)
+print("dissrigard yellow text")
+time.sleep(1.5)
+os.system('pip install pipwin')
+os.system('pipwin install pyaudio')
+os.system('pip install SpeechRecognition')
+os.system('pip install pyttsx3')
+os.system('pip install google')
+os.system('pip install beautifulsoup4')
+os.system('pip install pyautogui')
+os.system('pip install pydub')
+os.system('pip install keyboard')
+print("done")
